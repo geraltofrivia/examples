@@ -32,6 +32,7 @@ parser.add_argument('--netG', default='', help="path to netG (to continue traini
 parser.add_argument('--netD', default='', help="path to netD (to continue training)")
 parser.add_argument('--outf', default='.', help='folder to output images and model checkpoints')
 parser.add_argument('--manualSeed', type=int, help='manual seed')
+parser.add_argument('--gpuid', type=int, help='specify which specific gpu to use')
 
 opt = parser.parse_args()
 print(opt)
@@ -50,6 +51,8 @@ if opt.cuda:
     torch.cuda.manual_seed_all(opt.manualSeed)
 
 cudnn.benchmark = True
+
+gpuid = opt.gpuid 
 
 if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
@@ -194,11 +197,11 @@ real_label = 1
 fake_label = 0
 
 if opt.cuda:
-    netD.cuda()
-    netG.cuda()
-    criterion.cuda()
-    input, label = input.cuda(), label.cuda()
-    noise, fixed_noise = noise.cuda(), fixed_noise.cuda()
+    netD.cuda(gpuid)
+    netG.cuda(gpuid)
+    criterion.cuda(gpuid)
+    input, label = input.cuda(gpuid), label.cuda(gpuid)
+    noise, fixed_noise = noise.cuda(gpuid), fixed_noise.cuda(gpuid)
 
 fixed_noise = Variable(fixed_noise)
 
@@ -216,7 +219,7 @@ for epoch in range(opt.niter):
         real_cpu, _ = data
         batch_size = real_cpu.size(0)
         if opt.cuda:
-            real_cpu = real_cpu.cuda()
+            real_cpu = real_cpu.cuda(gpuid)
         input.resize_as_(real_cpu).copy_(real_cpu)
         label.resize_(batch_size).fill_(real_label)
         inputv = Variable(input)

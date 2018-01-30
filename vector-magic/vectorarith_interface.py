@@ -73,7 +73,7 @@ def generate_with_noise(z):
     # Then give it to generator to get hot steamy image
     image = netG(noise)
 
-    return image
+    return noise, image
 
 
 def deal_with_user():
@@ -88,6 +88,7 @@ def deal_with_user():
     selected_c = False
 
     images_a, images_b, images_c = [], [], []
+    z_a, z_b, z_c = [], [], []
 
     while True:
 
@@ -98,45 +99,38 @@ def deal_with_user():
         if not selected_a:
 
             # Create three noise variables, generate three corresponding images and ask user to verify them.
-            z = [np.random.normal(0, 1, size=(1, 100, 1, 1)) for _ in range(3)]
+            z_a = np.random.normal(0, 1, size=(3, 100, 1, 1))
 
             # Create the three corresponding images
-            images_a = [generate_with_noise(_noise) for _noise in z]
+            z_a, images_a = generate_with_noise(z_a)
 
             # Dump them in the op dir
-            vutils.save_image(images_a[0].data, op_path + 'a_00.png', normalize=True)
-            vutils.save_image(images_a[1].data, op_path + 'a_01.png', normalize=True)
-            vutils.save_image(images_a[2].data, op_path + 'a_02.png', normalize=True)
+            vutils.save_image(images_a.data, op_path + 'a.png', normalize=True)
 
             print("Generated images for A.")
 
         if not selected_b:
 
             # Create three noise variables, generate three corresponding images and ask user to verify them.
-            z = [np.random.normal(0, 1, size=(1, 100, 1, 1)) for _ in range(3)]
+            z_b = np.random.normal(0, 1, size=(3, 100, 1, 1))
 
             # Create the three corresponding images
-            images_b = [generate_with_noise(_noise) for _noise in z]
+            z_b, images_b = generate_with_noise(z_b)
 
             # Dump them in the op dir
-            vutils.save_image(images_b[0].data, op_path + 'b_00.png', normalize=True)
-            vutils.save_image(images_b[1].data, op_path + 'b_01.png', normalize=True)
-            vutils.save_image(images_b[2].data, op_path + 'b_02.png', normalize=True)
+            vutils.save_image(images_b.data, op_path + 'b.png', normalize=True)
 
             print("Generated images for B.")
 
         if not selected_c:
-
             # Create three noise variables, generate three corresponding images and ask user to verify them.
-            z = [np.random.normal(0, 1, size=(1, 100, 1, 1)) for _ in range(3)]
+            z_c = np.random.normal(0, 1, size=(3, 100, 1, 1))
 
             # Create the three corresponding images
-            images_c = [generate_with_noise(_noise) for _noise in z]
+            z_c, images_c = generate_with_noise(z_c)
 
             # Dump them in the op dir
-            vutils.save_image(images_c[0].data, op_path + 'c_00.png', normalize=True)
-            vutils.save_image(images_c[1].data, op_path + 'c_01.png', normalize=True)
-            vutils.save_image(images_c[2].data, op_path + 'c_02.png', normalize=True)
+            vutils.save_image(images_c.data, op_path + 'c.png', normalize=True)
 
             print("Generated images for C.")
 
@@ -157,8 +151,26 @@ def deal_with_user():
         if 'b' in input: selected_b = True
         if 'c' in input: selected_c = True
 
-    return images_a, images_b, images_c
+    return images_a, images_b, images_c, z_a, z_b, z_c
 
+
+def run():
+
+    # Orchestrate everything
+    imga, imgb, imgc, za, zb, zc = deal_with_user()
+
+    # Create average of z
+    za_avg = np.sum(za.data.numpy(), axis=0).reshape((1,100,1,1))/3
+    zb_avg = np.sum(zb.data.numpy(), axis=0).reshape((1,100,1,1))/3
+    zc_avg = np.sum(zc.data.numpy(), axis=0).reshape((1,100,1,1))/3
+
+    # Create image for all these three noise's average
+    z_avg = za_avg -  zb_avg + zc_avg
+
+    _, final_image = generate_with_noise(z_avg)
+
+    # Dump this image
+    vutils.save_image(final_image.data, op_path + 'final.png', normalize=True)
 
 if __name__ == '__main__':
-    deal_with_user()
+    run()

@@ -1,6 +1,4 @@
 from __future__ import print_function
-import argparse
-import os
 import pickle
 import numpy as np
 import torch
@@ -139,13 +137,5 @@ for i, data in enumerate(test_data, 0):
     test_Y.append(label)
 
 print("Done collecting testdata features")
-
-
-
-# # Put it in scikit.
-# classifier = svm.SVC()
-# classifier.fit(train_X, train_Y)
-#
-# svm_op = classifier.predict(test_Y)
 
 pickle.dump({'trainX':train_X, 'trainY':train_Y, 'testX':test_X, 'testY':test_Y}, open("matrices.dat","w+"))

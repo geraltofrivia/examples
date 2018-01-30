@@ -13,11 +13,14 @@
 in [11] (see ‘vector arithmetic in face samples’ section). Feel free to create your own dataset of interest; other possibilities include Caltech-UCSD Birds-200-2011, Oxford-102
 flowers and Food-101.
 
+### Usage:
+ Head over to ```./dcgan/``` for Task1; ```./dcgan_lsun/``` for Task2; and ```./vectormagic/``` for the third task.
+
 
 ### Reference:
 
-**[Paper](http://example.com)**
+**[Paper](https://arxiv.org/abs/1511.06434)**
 
-**[Assignment](http://example.com)**
+**[Assignment](https://github.com/geraltofrivia/pytorchexamples/tree/master/assignment.pdf)**
 
-**Datasets**: [Imagenet](http://example.com); [Food-101](http://example.com); [Oxford-102 Flower](http://example.com)
+**Datasets**: [Imagenet](http://www.image-net.org/); [Food-101](https://www.vision.ee.ethz.ch/datasets_extra/food-101/); [Oxford-102 Flower](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/)

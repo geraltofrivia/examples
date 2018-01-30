@@ -34,7 +34,7 @@ train_data = data_loader.ImageFolder(traindir, transform=transform)
 test_data = data_loader.ImageFolder(testdir, transform=transform)
 
 # Useless macros
-ngpu = 0
+ngpu = 1
 nc = 3
 ndf = 64
 
@@ -127,7 +127,7 @@ print("Done collecting traindata features")
 test_X = []
 test_Y = []
 
-for i, data in enumerate(train_data, 0):
+for i, data in enumerate(test_data, 0):
     image, label = data
 
     # Fool the network to think you're doing this in batches

@@ -9,7 +9,7 @@ np.random.seed(42)
 start_time = time.time()
 
 data = pickle.load(open('matrices.dat'))
-clf = svm.LinearSVC( verbose=True, max_iter=100)
+clf = svm.LinearSVC(verbose=True, max_iter=1000)
 
 load_time = time.time()
 print("Loadtime: ", "--- %s seconds ---" % (load_time - start_time))
@@ -28,6 +28,7 @@ split_time = time.time()
 print("Splittime: ", "--- %s seconds ---" % (split_time - load_time))
 
 clf.fit(trainX, trainY)
+pickle.dump(clf, open('classifierlinear.svm', 'w+'))
 
 train_time = time.time()
 print("Traintime: ", "--- %s seconds ---" % (train_time - split_time))
@@ -39,7 +40,7 @@ print("Testtime: ", "--- %s seconds ---" % (test_time - train_time))
 
 pickle.dump(answers, open('answerslinear.dat', 'w+'))
 
-pickle.dump(clf, open('classifierlinear.svm', 'w+'))
+# pickle.dump(clf, open('classifierlinear.svm', 'w+'))
 
 dumptime = time.time()
 print("Dumptime: ", "--- %s seconds ---" % (dumptime - test_time))

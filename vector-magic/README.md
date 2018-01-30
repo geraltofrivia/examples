@@ -10,7 +10,7 @@ Unpack it in ``./dataset/flower/jpg/<anyarbitaryDIRname>``
 
 Run 
 ``
-    python dcgan.py --dataset imagefolder --cuda --gpuid 2 --manualSeed 42 --workers 2 --dataroot ./dataset/flower/jpg/
+    python dcgan.py --dataset folder --cuda --gpuid 2 --manualSeed 42 --workers 2 --dataroot ./dataset/flower/jpg/
 ``
 
 > Script runs for 25 epochs by default

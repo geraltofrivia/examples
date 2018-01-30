@@ -9,12 +9,12 @@ from torch.autograd import Variable
 
 
 # Macros (Based on Flower dataset  params)
-nz = 300
+nz = 100
 ngf = 64
 nc = 3
 
 # Paths for pre-trained Generator
-netG_path = "../op/q1/netD_epoch_14.pth"
+netG_path = "../op/q3/run1/netG_epoch_24.pth"
 op_path = "../op/q3/run1/quickmath/"
 
 # custom weights initialization called on netG and netD
@@ -48,7 +48,7 @@ class _netG(nn.Module):
             nn.BatchNorm2d(ngf),
             nn.ReLU(True),
             # state size. (ngf) x 32 x 32
-            nn.ConvTranspose2d(    ngf,      nc, 4, 2, 1, bias=False),
+            nn.ConvTranspose2d(ngf,      nc, 4, 2, 1, bias=False),
             nn.Tanh()
             # state size. (nc) x 64 x 64
         )
@@ -65,10 +65,10 @@ print(netG)
 
 
 def generate_with_noise(z):
-    """Expects a numpy noise arr (with shape: 1,300,1,1)"""
+    """Expects a numpy noise arr (with shape: 1,100,1,1)"""
 
     # Convert the variable to a torch tensor, then a torch variable
-    noise = Variable(torch.from_numpy(z))
+    noise = Variable(torch.from_numpy(z).float())
 
     # Then give it to generator to get hot steamy image
     image = netG(noise)
@@ -98,7 +98,7 @@ def deal_with_user():
         if not selected_a:
 
             # Create three noise variables, generate three corresponding images and ask user to verify them.
-            z = [np.random.normal(0, 1, size=(1, 300, 1, 1)) for _ in range(3)]
+            z = [np.random.normal(0, 1, size=(1, 100, 1, 1)) for _ in range(3)]
 
             # Create the three corresponding images
             images_a = [generate_with_noise(_noise) for _noise in z]
@@ -113,7 +113,7 @@ def deal_with_user():
         if not selected_b:
 
             # Create three noise variables, generate three corresponding images and ask user to verify them.
-            z = [np.random.normal(0, 1, size=(1, 300, 1, 1)) for _ in range(3)]
+            z = [np.random.normal(0, 1, size=(1, 100, 1, 1)) for _ in range(3)]
 
             # Create the three corresponding images
             images_b = [generate_with_noise(_noise) for _noise in z]
@@ -125,18 +125,18 @@ def deal_with_user():
 
             print("Generated images for B.")
 
-        if not selected_b:
+        if not selected_c:
 
             # Create three noise variables, generate three corresponding images and ask user to verify them.
-            z = [np.random.normal(0, 1, size=(1, 300, 1, 1)) for _ in range(3)]
+            z = [np.random.normal(0, 1, size=(1, 100, 1, 1)) for _ in range(3)]
 
             # Create the three corresponding images
-            images_b = [generate_with_noise(_noise) for _noise in z]
+            images_c = [generate_with_noise(_noise) for _noise in z]
 
             # Dump them in the op dir
-            vutils.save_image(images_b[0].data, op_path + 'b_00.png', normalize=True)
-            vutils.save_image(images_b[1].data, op_path + 'b_01.png', normalize=True)
-            vutils.save_image(images_b[2].data, op_path + 'b_02.png', normalize=True)
+            vutils.save_image(images_c[0].data, op_path + 'c_00.png', normalize=True)
+            vutils.save_image(images_c[1].data, op_path + 'c_01.png', normalize=True)
+            vutils.save_image(images_c[2].data, op_path + 'c_02.png', normalize=True)
 
             print("Generated images for C.")
 

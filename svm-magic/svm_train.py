@@ -2,7 +2,7 @@ import pickle
 from sklearn import svm
 
 data = pickle.load(open('matrices.dat'))
-clf = svm.SVC(decision_function_shape='ovo')
+clf = svm.SVC(decision_function_shape='ovo', verbose=True, max_iter=1, cache_size=3000)
 
 print("About to start training")
 
